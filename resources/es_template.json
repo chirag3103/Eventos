@@ -1,0 +1,128 @@
+{
+  "index_patterns": ["test*"],
+  "settings": {
+    "number_of_shards": 1,
+    "analysis":{
+         "analyzer":{
+            "process_text":{
+               "type":"custom",
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase",
+                  "english_stop",
+                  "synonym"
+               ]
+            },
+            "process_text_stem":{
+               "type":"custom",
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase",
+                  "english_stop",
+                  "porter_stem",
+                  "synonym"
+               ]
+            },
+            "search_text":{
+               "type":"custom",
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase",
+                  "english_stop",
+                  "synonym"
+               ]
+            },
+            "search_text_stem":{
+               "type":"custom",
+               "tokenizer":"standard",
+               "filter":[
+                  "lowercase",
+                  "english_stop",
+                  "porter_stem",
+                  "synonym"
+               ]
+            }
+         },
+         "filter":{
+            "english_stop":{
+               "type":"stop",
+               "stopwords":"english"
+            },
+            "synonym" : {
+                "type" : "synonym",
+                "synonyms" : [
+                    "comedy, laugh, humor, stand up, improv, parody => comedy",
+                    "tech, code, iot, analytics => tech ",
+                    "movie, film, actor. drama, show => movie",
+                    "exercise, fitness, yoga, workout, jog, swim, cardio => exercise",
+                    "music, opera, karaoke, musician, singer, concert, musical, band => music",
+                    "photography, camera, filming, filmmaking, editing, videography => photography",
+                    "sport, cycling, soccer, tennis, football association, baseball, basketball, game, athletics => sport",
+                    "pets, dog, cat, puppy, bird, kennel => pets",
+                    "food, cooking, cheese, organic, diet, catering, meat => food",
+                    "fashion, style, clothing, trend, designer, dress, apparel, boutique => fashion",
+                    "automobile, car, automotive, racing,  motorcycle => automobile",
+                    "career, job, professional, employment, employer, hire, internship, job fair, work => career",
+                    "education, teaching, school, scholarship, knowledge, university, college, graduate, degree, faculty => education"
+                ]
+            }
+         }
+      }
+  },
+  "mappings": {
+    "_doc": {
+      "_source": {
+        "enabled": true
+      },
+      "properties": {
+      	"text": {
+      	  "type": "text",
+      	  "analyzer": "process_text_stem",
+      	  "search_analyzer": "search_text_stem"
+      	},
+        "name": {
+          "type": "text",
+          "analyzer": "process_text",
+          "search_analyzer": "search_text"
+        },
+        "description": {
+          "type": "text",
+          "analyzer": "process_text",
+          "search_analyzer": "search_text"
+        },
+        "created": {
+          "type": "date",
+          "format": "epoch_millis"
+        },
+        "start_time": {
+          "type": "date",
+          "format": "epoch_millis"
+        },
+        "end_time": {
+          "type": "date",
+          "format": "epoch_millis"
+        },
+        "duration": { "type": "long" },
+        "price": { "type": "float" },
+        "is_free": { "type": "boolean" },
+        "category":{
+          "properties": {
+            "name": {"type": "keyword"}
+          }
+        },
+        "meta_category":{
+        	"properties": {
+            	"name": {"type": "keyword"}
+        	}
+        },
+        "venue":{
+        	"properties": {
+            "zip":  { "type": "integer" },
+            "name": { "type": "keyword" },
+            "location":{ "type": "geo_point"}
+        	}
+        }
+      }
+    }
+  }
+}
